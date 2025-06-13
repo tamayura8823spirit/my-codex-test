@@ -4,19 +4,37 @@
   <meta charset="UTF-8">
   <title>Guess the Number Game</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 2em; }
+
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      padding-top: 50px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: inline-block;
+    }
     #game { margin-top: 1em; }
-    input[type=number] { width: 4em; }
+    input[type=number] { width: 4em; padding: 4px; font-size: 1rem; }
+    button { padding: 4px 10px; font-size: 1rem; }
+    #result { margin-top: 1em; font-weight: bold; }
   </style>
 </head>
 <body>
-  <h1>数当てゲーム</h1>
-  <p>1から100までの数字を当ててください。</p>
-  <div id="game">
-    <input id="guess" type="number" min="1" max="100">
-    <button id="submit">予想する</button>
+  <div class="container">
+    <h1>数当てゲーム</h1>
+    <p>1から100までの数字を当ててください。</p>
+    <div id="game">
+      <input id="guess" type="number" min="1" max="100">
+      <button id="submit">予想する</button>
+    </div>
+    <p id="result"></p>
   </div>
-  <p id="result"></p>
+
   <script>
     const answer = Math.floor(Math.random() * 100) + 1;
     const input = document.getElementById('guess');
@@ -29,10 +47,20 @@
       }
       if (guess === answer) {
         result.textContent = '正解！おめでとうございます！';
-      } else if (guess < answer) {
-        result.textContent = '小さすぎます。もっと大きい数字を試してください。';
       } else {
-        result.textContent = '大きすぎます。もっと小さい数字を試してください。';
+        const diff = Math.abs(guess - answer);
+        let hint = '';
+        if (diff <= 3) {
+          hint = 'ほぼ正解です！';
+        } else if (diff <= 10) {
+          hint = '近いです。';
+        }
+        if (guess < answer) {
+          result.textContent = `小さすぎます。${hint}もっと大きい数字を試してください。`;
+        } else {
+          result.textContent = `大きすぎます。${hint}もっと小さい数字を試してください。`;
+        }
+
       }
       input.value = '';
       input.focus();
